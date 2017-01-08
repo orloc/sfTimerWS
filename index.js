@@ -10,6 +10,7 @@ app.get('/', function(req, res){
 
 var EVENT_REMOVED = 'eqt:timer:removed';
 var EVENT_STARTED = 'eqt:timer:started';
+var EVENT_PAUSED = 'eqt:timer:paused';
 var EVENT_ADDED = 'eqt:timer:added';
 
 
@@ -22,13 +23,17 @@ io.on('connection', function(socket){
   });
 
   socket.on(EVENT_STARTED, function(data){
-    console.log('event started recieved', data);
+    console.log('event started received', data);
     io.emit(EVENT_STARTED, data);
+  });
 
+  socket.on(EVENT_PAUSED, function(data){
+    console.log('event pause received', data);
+    io.emit(EVENT_PAUSED, data);
   });
 
   socket.on(EVENT_ADDED, function(data){
-    console.log('event add recieved', data);
+    console.log('event add received', data);
     io.emit(EVENT_ADDED, data);
   });
 });
