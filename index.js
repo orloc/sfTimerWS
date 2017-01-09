@@ -11,6 +11,7 @@ app.get('/', function(req, res){
 var EVENT_REMOVED = 'eqt:timer:removed';
 var EVENT_STARTED = 'eqt:timer:started';
 var EVENT_PAUSED = 'eqt:timer:paused';
+var EVENT_RESET = 'eqt:timer:reset';
 var EVENT_ADDED = 'eqt:timer:added';
 
 
@@ -18,22 +19,27 @@ io.on('connection', function(socket){
   console.log('a user connected');
 
   socket.on(EVENT_REMOVED, function(data){
-    console.log('event removed recieved', data);
+    console.log('event removed received');
     io.emit(EVENT_REMOVED, data);
   });
 
   socket.on(EVENT_STARTED, function(data){
-    console.log('event started received', data);
+    console.log('event started received');
     io.emit(EVENT_STARTED, data);
   });
 
   socket.on(EVENT_PAUSED, function(data){
-    console.log('event pause received', data);
+    console.log('event pause received');
     io.emit(EVENT_PAUSED, data);
   });
 
+  socket.on(EVENT_RESET, function(data){
+    console.log('event reset received');
+    io.emit(EVENT_RESET, data);
+  });
+
   socket.on(EVENT_ADDED, function(data){
-    console.log('event add received', data);
+    console.log('event add received');
     io.emit(EVENT_ADDED, data);
   });
 });
