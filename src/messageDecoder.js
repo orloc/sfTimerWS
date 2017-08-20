@@ -29,7 +29,7 @@ class MessageDecoder {
   }
   
   pop(){
-    return this.messages.slice(0, 1)[0]; 
+    return this.messages.splice(0, 1)[0]; 
   }
   
 }

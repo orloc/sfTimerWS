@@ -33,6 +33,7 @@ sock.on('message', (msg)  => {
         const client = clients[knownSockets[socketId]];
 
         if (message.acting_user.id !== client.id){
+          log(`Sending ${message.action} to user ${client.id} initiated by ${message.acting_user.id}`);
           io.sockets.sockets[client.socket_id].emit(message.action, message.content);
         }
       });
@@ -47,6 +48,10 @@ io.on('connection', (socket) => {
       .then((client) => {
         log(`Client ${client.socket_id} with username ${client.username} acknowledged connection.`);
       });
+  });
+  
+  socket.on('reconnect', (thing) => {
+    console.log(thing);
   });
 
   socket.on('disconnect', () => {
