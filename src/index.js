@@ -4,9 +4,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.get('/', function(req, res){
-  res.send('<h1>Hello world</h1>');
-});
+var zmq = require('zeromq');
+var sock = zmq.socket('pull');
 
 var EVENT_REMOVED = 'eqt:timer:removed';
 var EVENT_STARTED = 'eqt:timer:started';
@@ -14,7 +13,15 @@ var EVENT_PAUSED = 'eqt:timer:paused';
 var EVENT_RESET = 'eqt:timer:reset';
 var EVENT_ADDED = 'eqt:timer:added';
 
+sock.bindSync('tcp://127.0.0.1:5555');
+console.log('Worker bound');
 
+sock.on('message', function(msg){
+    console.log(msg.toString());  
+});
+
+
+    /*
 io.on('connection', function(socket){
   console.log('a user connected');
 
@@ -52,3 +59,4 @@ io.on('disconnect', function(socket){
 http.listen(3000, function(){
   console.log('listening on *:3000');
 });
+    */
