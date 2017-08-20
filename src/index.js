@@ -1,23 +1,23 @@
-'use strict';
+import MessageDecoder from "./messageDecoder";
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const zmq = require('zeromq');
+const sock = zmq.socket('pull');
 
-var zmq = require('zeromq');
-var sock = zmq.socket('pull');
+const messageDecoder = new MessageDecoder();
 
-var EVENT_REMOVED = 'eqt:timer:removed';
-var EVENT_STARTED = 'eqt:timer:started';
-var EVENT_PAUSED = 'eqt:timer:paused';
-var EVENT_RESET = 'eqt:timer:reset';
-var EVENT_ADDED = 'eqt:timer:added';
 
 sock.bindSync('tcp://127.0.0.1:5555');
 console.log('Worker bound');
 
 sock.on('message', function(msg){
-    console.log(msg.toString());  
+  messageDecoder.decodeMessage(msg)
+  .then((message) => {
+    console.log(message);
+  }).catch((err) =>
+  console.log(err));
 });
 
 
