@@ -37,7 +37,7 @@ sock.on('message', (msg)  => {
         }
 
         if (message.acting_user.id !== client.id){
-          log(`Sending ${message.action} to user ${client.id} initiated by ${message.acting_user.id}`);
+          log(`Sending ${message.action} on ${message.entity} to user ${client.id} initiated by ${message.acting_user.id}`);
           io.sockets.sockets[client.socket_id].emit(message.action, { payload: message.content, entity: message.entity });
         }
       });
