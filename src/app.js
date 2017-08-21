@@ -1,5 +1,5 @@
-import MessageDecoder from "./messageDecoder";
-import ConnectionManger from './connectionManager';
+import MessageDecoder from "./lib/messageDecoder";
+import ConnectionManger from './lib/connectionManager';
 
 const app = require('express')();
 const http = require('http').Server(app);
@@ -32,9 +32,13 @@ sock.on('message', (msg)  => {
         
         const client = clients[knownSockets[socketId]];
 
+        if (!client){
+          log('ERROR could not find recognized client - probably socket disconnect');
+        }
+
         if (message.acting_user.id !== client.id){
           log(`Sending ${message.action} to user ${client.id} initiated by ${message.acting_user.id}`);
-          io.sockets.sockets[client.socket_id].emit(message.action, message.content);
+          io.sockets.sockets[client.socket_id].emit(message.action, { payload: message.content, entity: message.entity });
         }
       });
     }).catch((err) =>{
